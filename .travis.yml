@@ -1,0 +1,22 @@
+language: python
+python:
+  - "3.6"
+
+services:
+  - docker
+
+jobs:
+  include:
+    - stage: deploy
+      if: branch = master AND type = push
+      name: "Upload image to Docker Hub"
+      script:
+        # this task takes very long to complete
+        - travis_wait 160 make docker-image
+      after_success:
+        - make docker-upload
+    - stage: test
+      name: "Test Numpy"
+      script: docker run --rm logbook2cloud /bin/bash -c "pip install pytest; python -c \"import numpy; numpy.test('full');\""
+    - name: "Test Pandas"
+      script: docker run --rm logbook2cloud /bin/bash -c "pip install pytest hypothesis; python -c \"import pandas; pandas.test();\"" 

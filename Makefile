@@ -3,7 +3,7 @@ SHELL := /bin/bash
 docker-test:
 	# prepare qemu
 	docker run --rm --privileged multiarch/qemu-user-static:register --reset
-	docker run --rm $$DOCKER_USERNAME/arm32v7-pandas:latest /bin/bash -c "pip install pytest hypothesis; python -c \"import pandas; pandas.test();\""
+	docker run --rm $$DOCKER_USERNAME/arm32v7-pandas:latest /bin/bash -c "python -c \"import pandas; print('Importing pandas worked, for version: ' + pandas.__version__);\""
 
 docker-image:
 	# prepare qemu
